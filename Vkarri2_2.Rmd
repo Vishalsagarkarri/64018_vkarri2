@@ -1,0 +1,142 @@
+---
+title: "QMM ASSIGNMENT"
+author: "Vishal sagar Karri"
+date: "2023-09-10"
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+Question 1
+
+## Decision Variables
+
+- \(X\): Number of Collegiate backpacks to produce per week.
+- \(Y\): Number of Mini backpacks to produce per week.
+
+## Objective Function
+
+Maximize the total profit (\(Z\)):
+
+\[Z = 32X + 24Y\]
+
+## Constraints
+
+1. Material Constraint:
+
+\[
+3X + 2Y \leq 5000
+\]
+
+2. Sales Constraints:
+
+\[
+X \leq 1000
+\]
+
+\[
+Y \leq 1200
+\]
+
+3. Labor Constraint:
+
+\[
+45X + 40Y \leq 35 \times 40 \times 60
+\]
+
+4. Non-negativity Constraints:
+
+\[
+X \geq 0
+\]
+
+\[
+Y \geq 0
+\]
+
+# Solution using R
+```{r}
+library(lpSolve)
+
+# Define the objective function coefficients
+obj_coef <- c(32, 24)
+
+# Define the matrix of constraint coefficients
+mat_coef <- matrix(c(3, 2, 1, 0, 0, 1, 45, 40), ncol = 2, byrow = TRUE)
+
+# Define the right-hand side of constraints
+rhs <- c(5000, 1000, 1200, 35 * 40 * 60)
+
+# Define the constraint types (<=)
+con_types <- rep("<=", length(rhs))
+
+# Solve the linear programming problem
+lp_result <- lp("max", obj_coef, mat_coef, con_types, rhs)
+
+# Print the solution
+cat("Collegiate backpacks to produce per week:", lp_result$solution[1], "\n")
+cat("Mini backpacks to produce per week:", lp_result$solution[2], "\n")
+cat("Maximum profit per week:", lp_result$objval, "\n")
+```
+
+
+
+Question 2
+
+## Decision Variables
+
+Let's define the decision variables:
+- \(X_1\): The number of large-sized units produced at Plant 1.
+- \(X_2\): The number of medium-sized units produced at Plant 2.
+- \(X_3\): The number of small-sized units produced at Plant 3.
+
+## Objective Function
+
+Maximize the total profit (\(Z\)):
+\[Z = 420X_1 + 360X_2 + 300X_3\]
+
+## Constraints
+
+1. Capacity Constraints:
+   - Plant 1 can produce up to 750 units per day.
+   - Plant 2 can produce up to 900 units per day.
+   - Plant 3 can produce up to 450 units per day.
+   \[X_1 \leq 750\]
+   \[X_2 \leq 900\]
+   \[X_3 \leq 450\]
+
+2. Storage Space Constraints:
+   - Plant 1 has 13,000 square feet of in-process storage space.
+   - Plant 2 has 12,000 square feet of in-process storage space.
+   - Plant 3 has 5,000 square feet of in-process storage space.
+   - Each unit of the large, medium, and small sizes produced per day requires 20, 15, and 12 square feet, respectively.
+   \[20X_1 + 15X_2 + 12X_3 \leq 13,000\]
+   \[20X_1 + 15X_2 + 12X_3 \leq 12,000\]
+   \[20X_1 + 15X_2 + 12X_3 \leq 5,000\]
+
+3. Sales Forecasts:
+   - Sales forecasts indicate that if available, 900, 1,200, and 750 units of the large, medium, and small sizes, would be sold per day.
+   \[X_1 \leq 900\]
+   \[X_2 \leq 1200\]
+   \[X_3 \leq 750\]
+
+4. Non-negativity Constraints:
+   \[X_1 \geq 0\]
+   \[X_2 \geq 0\]
+   \[X_3 \geq 0\]
+
+5. Percentage constraint - 
+
+Assume,
+
+A1 = Lx1 + Mx1 + Sx1
+
+A2 = Lx2 + Mx2 + Sx2
+
+A3 = Lx3 + Mx3 + Sx3
+                        $$ (A1 / 750)* 100 $$
+                        $$ (A2 / 900)* 100 $$
+                        $$ (A3 / 450)* 100 $$
+
+Non-negativity of decision variables - $$ (Lx1, Mx1, Sx1, Lx2, Mx2, Sx2, Lx3, Mx3 \hspace {.2cm} and \hspace {.2cm} Sx3)\ge 0 $$
